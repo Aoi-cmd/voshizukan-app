@@ -32,6 +32,7 @@ GEM
       sinatra (= 4.1.1)
       tilt (~> 2.0)
     tilt (2.6.0)
+    webrick (1.9.1)
 
 PLATFORMS
   x64-mingw-ucrt
@@ -42,6 +43,7 @@ DEPENDENCIES
   rackup
   sinatra
   sinatra-contrib
+  webrick
 
 BUNDLED WITH
    2.6.8
