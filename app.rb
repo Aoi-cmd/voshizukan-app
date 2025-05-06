@@ -9,11 +9,6 @@ USERS = {
   "testuser" => BCrypt::Password.create("password123")
 }
 
-# トップページ（テスト用）
-get '/' do
-  "Sinatraが動作しています!この世界 in my world..."
-end
-
 # ログインフォーム表示
 get '/login' do
   erb :login
