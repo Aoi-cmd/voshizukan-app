@@ -46,7 +46,8 @@ get '/logout' do
 end
 
 
-set :public_folder, File.dirname(__FILE__)
+set :public_folder, File.expand_path('public', __dir__)
+
 
 get '/index' do
   redirect '/login' unless session[:user]
