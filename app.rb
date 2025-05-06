@@ -50,5 +50,5 @@ set :public_folder, File.dirname(__FILE__)
 
 get '/index' do
   redirect '/login' unless session[:user]
-  send_file File.join(settings.public_folder, 'index.html')
+  erb :index
 end
