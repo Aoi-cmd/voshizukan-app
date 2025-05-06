@@ -4,10 +4,15 @@ require 'bcrypt'
 
 enable :sessions
 
-# 仮のユーザーデータ（本番ではDB推奨）
+# 仮のユーザーデータ
 USERS = {
   "testuser" => BCrypt::Password.create("password123")
 }
+
+# トップページにアクセスしたとき、ログインページへリダイレクト
+get '/' do
+  redirect '/login'
+end
 
 # ログインフォーム表示
 get '/login' do
