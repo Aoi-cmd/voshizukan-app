@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>V推し図鑑</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="index-page">
+  <header class="header">
+    <h1>V推し図鑑</h1>
+    <p>あなただけの推し活記録</p>
+  </header>
+
+  <section class="register">
+    <h2>ライバーを登録しよう</h2>
+    <input type="text" id="nameInput" placeholder="ライバー名" />
+    <input type="text" id="urlInput" placeholder="チャンネルURL" />
+    <input type="date" id="startDateInput" placeholder="出会い日" />
+    <textarea id="relationshipInput" placeholder="メモ欄"></textarea>
+    <button id="registerBtn" class="button">登録</button>
+  </section>
+
+  <div class="control-panel">
+    <section class="search">
+      <label for="searchInput" class="control-label">ライバー検索</label>
+      <input type="text" id="searchInput" placeholder="ライバー名で検索">
+    </section>
+
+    <section class="sort">
+      <label for="sortSelect" class="control-label">並び替え</label>
+      <select id="sortSelect">
+        <option value="desc">出会い日（新しい順）</option>
+        <option value="asc">出会い日（古い順）</option>
+      </select>
+    </section>
+  </div>
+
+  <main class="list" id="liverList"></main>
+
+  <form action="/logout" method="get" style="text-align: right;">
+  <button type="submit" class="button">ログアウト</button>
+</form>
+
+
+  <footer class="footer">
+    <p>&copy; 2025 V推し図鑑</p>
+  </footer>
+
+  <div id="notification" class="notification"></div>
+
+  <script>
+    const liverListEl = document.getElementById('liverList');
+    const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+
+    document.getElementById('registerBtn').addEventListener('click', function () {
+      const name = document.getElementById('nameInput').value.trim();
+      const url = document.getElementById('urlInput').value.trim();
+      const startDate = document.getElementById('startDateInput').value;
+      const relationship = document.getElementById('relationshipInput').value.trim();
+
+      if (!name || !url) {
+        alert("ライバー名とURLは必須です");
+        return;
+      }
+
+      const stored = JSON.parse(localStorage.getItem('livers') || '[]');
+      const isDuplicate = stored.some(l => l.name === name);
+      if (isDuplicate) {
+        alert(`「${name}」は既に登録されています。`);
+        return;
+      }
+
+      const liverData = {
+        id: Date.now(),
+        name,
+        channelUrl: url,
+        startDate,
+        relationship
+      };
+
+      stored.push(liverData);
+      localStorage.setItem('livers', JSON.stringify(stored));
+      renderAllLivers(searchInput.value);
+
+      document.getElementById('nameInput').value = '';
+      document.getElementById('urlInput').value = '';
+      document.getElementById('startDateInput').value = '';
+      document.getElementById('relationshipInput').value = '';
+      showNotification("ライバーを登録しました ✅");
+    });
+
+    function renderLiver(data) {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.innerHTML = `
+        <h2 class="card__title">${data.name}</h2>
+        <p><a href="${data.channelUrl}" target="_blank">チャンネルページを開く</a></p>
+        <p>出会い日: ${data.startDate || '未設定'}</p>
+        <p>メモ: ${data.relationship || 'なし'}</p>
+        <div class="card-buttons">
+          <button class="button viewBtn" data-id="${data.id}">このライバーの記録を見る</button>
+          <button class="button deleteBtn">削除</button>
+        </div>
+      `;
+
+      card.querySelector('.viewBtn').addEventListener('click', () => {
+        window.location.href = `liver.html?id=${data.id}`;
+      });
+
+      card.querySelector('.deleteBtn').addEventListener('click', () => {
+        if (confirm("本当に削除しますか？")) {
+          deleteLiver(data.id);
+        }
+      });
+
+      liverListEl.appendChild(card);
+    }
+
+    function renderAllLivers(keyword = '') {
+      liverListEl.innerHTML = '';
+      const stored = JSON.parse(localStorage.getItem('livers') || '[]');
+      const filtered = stored.filter(l => l.name.toLowerCase().includes(keyword.toLowerCase()));
+
+      const sortOrder = sortSelect?.value || 'desc';
+      filtered.sort((a, b) => {
+        const aDate = new Date(a.startDate || '1970-01-01');
+        const bDate = new Date(b.startDate || '1970-01-01');
+        return sortOrder === 'asc' ? aDate - bDate : bDate - aDate;
+      });
+
+      filtered.forEach(renderLiver);
+    }
+
+    function deleteLiver(id) {
+      let stored = JSON.parse(localStorage.getItem('livers') || '[]');
+      stored = stored.filter(item => item.id !== id);
+      localStorage.setItem('livers', JSON.stringify(stored));
+      renderAllLivers(searchInput.value);
+      showNotification("削除しました 🗑");
+    }
+
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2000);
+    }
+
+    searchInput.addEventListener('input', () => {
+      renderAllLivers(searchInput.value);
+    });
+
+    sortSelect.addEventListener('change', () => {
+      renderAllLivers(searchInput.value);
+    });
+
+    renderAllLivers();
+  </script>
+</body>
+</html>

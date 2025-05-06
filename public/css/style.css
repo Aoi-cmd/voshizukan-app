@@ -1,0 +1,333 @@
+.add-log {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: radial-gradient(circle at center, #ffffff, #f9f3ff, #f0f7ff); /* ヘッダーと同じ色味 */
+  backdrop-filter: blur(10px); /* ガラス風 */
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 2px solid rgba(255, 192, 203, 0.3); /* ピンクっぽいふち。お好みで */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-log h2 {
+  color: #e91e63; /* または #6a1b9a のようなバイオレット系でもOK */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+  body.index-page {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  background-image: url('../images/day6.png'); /* トップページ用 */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+ 
+}
+
+body.liver-page {
+  font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  background-image: url('../images/day4.png'); /* 詳細ページ用 */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+  
+  .header, .footer {
+    text-align: center;
+    padding: 1rem;
+    color: #222;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    background: radial-gradient(circle at center, #ffffff, #f9f3ff, #f0f7ff);
+    background-attachment: fixed;
+  }
+  
+  .register, .info, .add-log, .logs, .search, .sort {
+    max-width: 600px;
+    margin: 1rem auto;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .register {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.45); /* 半透明にする */
+  backdrop-filter: blur(10px); /* 背景ぼかし */
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 2px solid rgba(255, 192, 203, 0.4); /* ピンク系の淡い枠線 */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register h2 {
+  color: #e91e63; /* ピンク系。好みに応じて変更可 */
+}
+
+  
+  input[type="text"],
+  input[type="datetime-local"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.6rem;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .card {
+  background: radial-gradient(circle at center, #ffffff, #f9f3ff, #f0f7ff); /* ヘッダーと同系 */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 192, 203, 0.3); /* 淡いピンクの枠線 */
+  border-radius: 16px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+  
+  .card__thumbnail {
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  
+  .card__title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  
+  .input-log {
+    width: 100%;
+    margin: 0.4rem 0;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+  
+  .notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  
+  .notification.show {
+    display: block;
+  }
+  
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 600px) {
+    .card-buttons {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+
+  .control-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  background: radial-gradient(circle at center, #ffffff, #f8f0ff, #eef4ff);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.search,
+.sort {
+  flex: 1;
+  min-width: 250px;
+}
+
+.search h2 {
+  font-size: 1rem; /* お好みで 1rem や 0.9rem でもOK */
+  margin-bottom: 0.5rem;
+}
+
+
+.search input,
+.sort select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.logs h2 {
+  font-size: 1rem; /* お好みに応じて調整可能 */
+  margin-bottom: 0.5rem;
+}
+
+.log-title {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+
+.control-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  margin: 2rem;
+}
+.search, .sort {
+  flex: 1;
+  min-width: 280px;
+}
+.control-label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+#searchInput, #sortSelect {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 1rem auto; /* 中央揃え */
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  display: block;
+}
+
+.info {
+  background: radial-gradient(circle at center, #ffffff, #f9f3ff, #f0f7ff); /* ヘッダーと同系 */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 192, 203, 0.3); /* 淡いピンクの枠線 */
+  border-radius: 16px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.log-controls  {
+  max-width: 500px;
+  margin: 2rem auto; /* 中央に寄せるために左右auto */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5rem;
+  background: radial-gradient(circle at center, #ffffff, #f8f0ff, #eef4ff);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: left;
+
+  /* ↓ 中央揃え補強のために block 表示を明示 */
+  display: block;
+}
+
+.log-controls label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  display: block;
+  color: #1a1a1a;
+}
+
+
+
+.log-controls-group {
+  margin-bottom: 1rem;
+}
+
+/* 共通で検索欄・セレクトボックスに適用されるクラス */
+.log-input,
+.log-select {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+/* logs 見出しのスタイル（font-sizeを1.2remに） */
+.logs h2 {
+  font-size: 1.2rem !important;
+}

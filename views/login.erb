@@ -1,0 +1,11 @@
+<h2>ログイン</h2>
+
+<% if @error %>
+  <p style="color:red;"><%= @error %></p>
+<% end %>
+
+<form action="/login" method="post">
+  <label>ユーザー名: <input type="text" name="username"></label><br>
+  <label>パスワード: <input type="password" name="password"></label><br>
+  <input type="submit" value="ログイン">
+</form>

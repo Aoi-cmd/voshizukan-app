@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ライバー詳細</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="liver-page">
+  <header class="header">
+    <h1 id="liverName">ライバー詳細</h1>
+    <p id="channelUrlDisplay"></p>
+  </header>
+
+  <section class="info">
+    <p><strong>出会い日:</strong> <span id="startDate"></span></p>
+    <p><strong>メモ</strong> <span id="relationship"></span></p>
+  </section>
+
+  <section class="add-log">
+    <h2 class="log-title">好きな配信、動画はここへ</h2>
+    <input type="text" id="logTitle" placeholder="タイトル">
+    <input type="datetime-local" id="logViewedAt">
+    <textarea id="logMemo" placeholder="感想メモ"></textarea>
+    <textarea id="logTimestamp" placeholder="タイムスタンプメモ"></textarea>
+    <input type="text" id="logVideoUrl" placeholder="URL">
+    <button id="addLogBtn" class="button">追加</button>
+  </section>
+
+  <!-- 🔍検索＆並び替え UI -->
+  <section class="log-controls">
+    <div class="log-controls-group">
+      <label for="searchInput">タイトル検索</label><br>
+      <input type="text" id="searchInput" class="log-input" placeholder="タイトルで検索">
+    </div>
+
+    <div class="log-controls-group">
+      <label for="sortSelect">並び替え</label><br>
+      <select id="sortSelect" class="log-select">
+        <option value="desc">視聴日時（新しい順）</option>
+        <option value="asc">視聴日時（古い順）</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="logs">
+    <h2>配信・動画</h2>
+    <div id="logList"></div>
+  </section>
+
+  <div id="notification" class="notification"></div>
+
+  <footer class="footer">
+    <button class="button" onclick="location.href='index.html'">トップページへ戻る</button>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const liverId = Number(params.get('id'));
+    const liver = JSON.parse(localStorage.getItem('livers') || '[]').find(l => l.id === liverId);
+
+    if (!liver) {
+      alert('ライバー情報が見つかりません');
+      location.href = 'index.html';
+    }
+
+    document.getElementById('liverName').textContent = liver.name;
+    document.getElementById('channelUrlDisplay').innerHTML = `<a href="${liver.channelUrl}" target="_blank">チャンネルページを開く</a>`;
+    document.getElementById('startDate').textContent = liver.startDate || '未設定';
+    document.getElementById('relationship').textContent = liver.relationship || 'なし';
+
+    const logListEl = document.getElementById('logList');
+    const logsKey = `logs_${liver.id}`;
+
+    function renderLogs() {
+      logListEl.innerHTML = '';
+      let logs = JSON.parse(localStorage.getItem(logsKey) || '[]');
+      const searchKeyword = document.getElementById('searchInput').value.trim().toLowerCase();
+      const sortOrder = document.getElementById('sortSelect').value;
+
+      if (searchKeyword) {
+        logs = logs.filter(log => log.title.toLowerCase().includes(searchKeyword));
+      }
+
+      logs.sort((a, b) => {
+        const dateA = new Date(a.viewedAt || 0);
+        const dateB = new Date(b.viewedAt || 0);
+        return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+      });
+
+      logs.forEach((log, index) => {
+        const div = document.createElement('div');
+        div.classList.add('card');
+        div.innerHTML = `
+          <input type="text" value="${log.title}" id="title_${index}" class="input-log">
+          <input type="datetime-local" value="${log.viewedAt}" id="viewedAt_${index}" class="input-log">
+          <textarea id="memo_${index}" class="input-log">${log.memo}</textarea>
+          <textarea id="timestamp_${index}" class="input-log">${log.timestamp}</textarea>
+          <input type="text" value="${log.videoUrl || ''}" id="videoUrl_${index}" class="input-log" placeholder="動画URL（任意）">
+          ${log.videoUrl ? `<p><a href="${log.videoUrl}" target="_blank">動画を見る</a></p>` : ''}
+          <button class="button" onclick="saveLog(${index})">保存</button>
+          <button class="button deleteBtn" onclick="deleteLog(${index})">削除</button>
+        `;
+        logListEl.appendChild(div);
+      });
+    }
+
+    function saveLog(index) {
+      let logs = JSON.parse(localStorage.getItem(logsKey) || '[]');
+      logs[index].title = document.getElementById(`title_${index}`).value;
+      logs[index].viewedAt = document.getElementById(`viewedAt_${index}`).value;
+      logs[index].memo = document.getElementById(`memo_${index}`).value;
+      logs[index].timestamp = document.getElementById(`timestamp_${index}`).value;
+      logs[index].videoUrl = document.getElementById(`videoUrl_${index}`).value;
+      localStorage.setItem(logsKey, JSON.stringify(logs));
+      renderLogs();
+      showNotification("保存しました ✅");
+    }
+
+    function deleteLog(index) {
+      let logs = JSON.parse(localStorage.getItem(logsKey) || '[]');
+      logs.splice(index, 1);
+      localStorage.setItem(logsKey, JSON.stringify(logs));
+      renderLogs();
+      showNotification("削除しました 🗑");
+    }
+
+    document.getElementById('addLogBtn').addEventListener('click', () => {
+      const title = document.getElementById('logTitle').value;
+      const viewedAt = document.getElementById('logViewedAt').value;
+      const memo = document.getElementById('logMemo').value;
+      const timestamp = document.getElementById('logTimestamp').value;
+      const videoUrl = document.getElementById('logVideoUrl').value;
+
+      if (!title || !viewedAt) {
+        alert("配信タイトルと視聴日時は必須です");
+        return;
+      }
+
+      const newLog = { title, viewedAt, memo, timestamp, videoUrl };
+      const logs = JSON.parse(localStorage.getItem(logsKey) || '[]');
+      logs.push(newLog);
+      localStorage.setItem(logsKey, JSON.stringify(logs));
+
+      document.getElementById('logTitle').value = '';
+      document.getElementById('logViewedAt').value = '';
+      document.getElementById('logMemo').value = '';
+      document.getElementById('logTimestamp').value = '';
+      document.getElementById('logVideoUrl').value = '';
+
+      renderLogs();
+      showNotification("配信ログを追加しました ✅");
+    });
+
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2000);
+    }
+
+    document.getElementById('searchInput').addEventListener('input', renderLogs);
+    document.getElementById('sortSelect').addEventListener('change', renderLogs);
+
+    renderLogs();
+  </script>
+</body>
+</html>
